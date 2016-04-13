@@ -4,7 +4,7 @@ Android rush project for BJTU
 
 Messenger directed to elders (70 and more)
 
-Group:
+##Group:
 
 Nicolas Couturier
 
