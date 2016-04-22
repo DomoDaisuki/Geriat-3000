@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -48,66 +48,11 @@
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
 
-        <ScrollView
-            android:layout_width="wrap_content"
+        <ListView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/scrollView" >
+            android:id="@+id/listContacts">
+        </ListView>
 
-            <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/colorPrimaryDark"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
-
-                <TextView
-                    android:id="@+id/lblExpenseCancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="BOB"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="20dp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    />
-
-                <ImageButton
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:id="@+id/Tel2"
-                    android:src="@mipmap/icon_tel"
-                    android:adjustViewBounds="false"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/colorPrimary"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="10dp"
-                    android:clickable="true" />
-
-                <ImageButton
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:id="@+id/Message2"
-                    android:src="@mipmap/icon_message"
-                    android:adjustViewBounds="false"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/colorPrimary"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="10dp"
-                    android:clickable="true"
-                    android:nestedScrollingEnabled="true"
-                    android:onClick="sendMessage"/>
-            </LinearLayout>
-        </ScrollView>
     </RelativeLayout>
-</FrameLayout>
+</LinearLayout>
