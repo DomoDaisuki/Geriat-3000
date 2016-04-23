@@ -52,28 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         List<Contact> values = dataSource.getAllContacts();
 
+        final ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(this, android.R.layout.simple_list_item_1, values);
 
-        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(this, android.R.layout.simple_list_item_1, values);
-
-        Contact contact1 = new Contact();
-        Contact contact2 = new Contact();
-        contact1.setName("mathieu");
-        contact1.setId(0);
-        adapter.add(contact1);
-        contact2.setName("quentin");
-        contact2.setId(1);
-        adapter.add(contact2);
-        System.out.println("truc " + adapter.toString());
-        Log.d("CREATION", "truc " + adapter.toString());
-        Log.d("CREATION", "truc " + adapter.getCount());
-        Log.d("CREATION", "truc " + adapter.getItem(0));
-        Log.d("CREATION", "truc " + adapter.getItem(1));
-        //listView.setAdapter(adapter);
-        values.set(0, contact1);
-        values.set(1, contact2);
-        listView.setAdapter(new CustomAdapter(this, values));
-
-        listView.setOnItemClickListener(onItemClickListener);
+        listView.setAdapter(new CustomAdapter(this, adapter));
 
 
 
@@ -97,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
                         EditText nameContact = (EditText) dialog.findViewById(R.id.nameContact);
                         EditText phoneContact = (EditText) dialog.findViewById(R.id.phoneContact);
                         dataSource.createContact(nameContact.getText().toString(), phoneContact.getText().toString());
+                        Contact contact = new Contact();
+                        contact.setName(nameContact.getText().toString());
+                        contact.setPhone_number(phoneContact.getText().toString());
+                        adapter.add(contact);
+                        adapter.notifyDataSetChanged();
+                        dialog.dismiss();
+
                     }
                 });
 
@@ -155,11 +143,4 @@ public class MainActivity extends AppCompatActivity {
         dataSource.close();
         super.onPause();
     }
-
-    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-            Toast.makeText(context, "coucou", Toast.LENGTH_LONG).show();
-        }
-    };
 }
