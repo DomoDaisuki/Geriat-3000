@@ -28,9 +28,8 @@ public class ContactsDataSource {
 
     public Contact createContact(String name, String phoneNumber) {
         ContentValues values = new ContentValues();
-
         values.put(MySQLiteHelper.COLUMN_NAME, name);
-        //values.put(MySQLiteHelper.COLUMN_PHONE_NUMBER, phoneNumber);
+        values.put(MySQLiteHelper.COLUMN_PHONE_NUMBER, phoneNumber);
 
         long insertId = database.insert(MySQLiteHelper.TABLE_CONTACT, null, values);
         Cursor cursor = database.query(MySQLiteHelper.TABLE_CONTACT, allColumns, MySQLiteHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
@@ -66,6 +65,7 @@ public class ContactsDataSource {
         Contact contact = new Contact();
         contact.setId(cursor.getLong(0));
         contact.setName(cursor.getString(1));
+        contact.setPhone_number(cursor.getString(2));
         return contact;
     }
 }
