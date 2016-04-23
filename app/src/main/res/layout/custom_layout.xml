@@ -65,6 +65,5 @@
         android:layout_marginBottom="5dp"
         android:layout_marginRight="10dp"
         android:clickable="true"
-        android:nestedScrollingEnabled="true"
-        android:onClick="sendMessage"/>
+        android:nestedScrollingEnabled="true" />
 </LinearLayout>

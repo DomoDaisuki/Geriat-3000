@@ -68,6 +68,10 @@ public class CustomAdapter extends BaseAdapter {
         buttonPhone.setTag(position);
         buttonPhone.setOnClickListener(buttonPhoneClickListener);
 
+        ImageButton buttonMessage = (ImageButton) view.findViewById(R.id.Message2);
+        buttonMessage.setTag(position);
+        buttonMessage.setOnClickListener(buttonMessageClickListener);
+
         TextView lblExpenseCancel = (TextView)view.findViewById(R.id.lblExpenseCancel);
         lblExpenseCancel.setText(result.getItem(position).getName());
 
@@ -95,5 +99,14 @@ public class CustomAdapter extends BaseAdapter {
             callIntent.setData(Uri.parse("tel:" + tel));
             context.startActivity(callIntent);
         }
+    };
+
+    private View.OnClickListener buttonMessageClickListener = new View.OnClickListener() {
+      @Override
+        public void onClick(View v) {
+          Intent intent = new Intent(context, Message.class);
+          intent.putExtra("contactId", Long.toString(result.getItem((Integer) v.getTag()).getId()));
+          context.startActivity(intent);
+      }
     };
 }

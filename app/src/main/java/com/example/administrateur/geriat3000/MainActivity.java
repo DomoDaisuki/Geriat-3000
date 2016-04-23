@@ -122,10 +122,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     public void sendMessage(View view) {
         Intent intent = new Intent(this, Message.class);
         startActivity(intent);
     }
+    */
 
     public void deleteContact(int position, View view) {
         //dataSource.deleteContact(position);
