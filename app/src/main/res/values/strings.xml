@@ -9,4 +9,9 @@
     <string name="on_stop">onStop</string>
     <string name="on_pause">onPause</string>
     <string name="on_resume">onResume</string>
+    <string name="add">add</string>
+    <string name="cancel">cancel</string>
+    <string name="Add_a_contact">Add a contact</string>
+    <string name="name">name</string>
+    <string name="phone_number">Phone Number</string>
 </resources>

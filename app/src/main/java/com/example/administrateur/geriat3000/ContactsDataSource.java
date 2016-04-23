@@ -16,7 +16,7 @@ import java.util.List;
 public class ContactsDataSource {
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
-    private String[] allColumns = { MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_NAME};
+    private String[] allColumns = { MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_NAME, MySQLiteHelper.COLUMN_PHONE_NUMBER};
 
     public ContactsDataSource(Context context) { dbHelper = new MySQLiteHelper(context);}
 
@@ -26,9 +26,12 @@ public class ContactsDataSource {
 
     public void close() {dbHelper.close();}
 
-    public Contact createContact(String contact) {
+    public Contact createContact(String name, String phoneNumber) {
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_NAME, contact);
+
+        values.put(MySQLiteHelper.COLUMN_NAME, name);
+        //values.put(MySQLiteHelper.COLUMN_PHONE_NUMBER, phoneNumber);
+
         long insertId = database.insert(MySQLiteHelper.TABLE_CONTACT, null, values);
         Cursor cursor = database.query(MySQLiteHelper.TABLE_CONTACT, allColumns, MySQLiteHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();

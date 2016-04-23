@@ -6,6 +6,7 @@ package com.example.administrateur.geriat3000;
 public class Contact {
     private long id;
     private String name;
+    private String phone_number;
 
     public long getId()
     {
@@ -27,6 +28,9 @@ public class Contact {
         this.name = name;
     }
 
+    public String getPhone_number() { return this.phone_number;}
+
+    public void setPhone_number(String phone_number) {this.phone_number = phone_number;}
     @Override
     public String toString()
     {

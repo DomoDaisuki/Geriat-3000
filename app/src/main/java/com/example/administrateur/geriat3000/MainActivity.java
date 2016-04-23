@@ -1,17 +1,28 @@
 package com.example.administrateur.geriat3000;
 
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private ContactsDataSource dataSource;
     private Toolbar toolbar;
     private ListView listView;
+    private FloatingActionButton button;
+    final Context context = this;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         listView = (ListView) findViewById(R.id.listContacts);
+
+        button = (FloatingActionButton) findViewById(R.id.addButton);
 
 
         dataSource = new ContactsDataSource(this);
@@ -56,7 +72,45 @@ public class MainActivity extends AppCompatActivity {
         values.set(0, contact1);
         values.set(1, contact2);
         listView.setAdapter(new CustomAdapter(this, values));
-    }
+
+        listView.setOnItemClickListener(onItemClickListener);
+
+
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                // custom dialog
+                final Dialog dialog = new Dialog(context);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.custom_layout_add_contact);
+
+                Button dialogButtonOk = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+                // if button is clicked, close the custom dialog
+                 dialogButtonOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditText nameContact = (EditText) dialog.findViewById(R.id.nameContact);
+                        EditText phoneContact = (EditText) dialog.findViewById(R.id.phoneContact);
+                        dataSource.createContact(nameContact.getText().toString(), phoneContact.getText().toString());
+                    }
+                });
+
+                dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -85,6 +139,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void deleteContact(int position, View view) {
+        //dataSource.deleteContact(position);
+    }
+
+
     @Override
     public void onResume() {
         dataSource.open();
@@ -96,4 +155,11 @@ public class MainActivity extends AppCompatActivity {
         dataSource.close();
         super.onPause();
     }
+
+    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+            Toast.makeText(context, "coucou", Toast.LENGTH_LONG).show();
+        }
+    };
 }
