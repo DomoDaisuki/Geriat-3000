@@ -7,4 +7,6 @@
     <color name="black">#000000</color>
     <color name="primary_text_default_material_light">#deffffff</color>
     <color name="primary_text_material_light">#ffffff</color>
+    <color name="yellow">#FFD700</color>
+    <color name="blue">#007FFF</color>
 </resources>

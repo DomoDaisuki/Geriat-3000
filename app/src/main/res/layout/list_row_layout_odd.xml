@@ -9,6 +9,7 @@
         android:layout_gravity="left"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="20dp"
+        android:background="@color/yellow"
         android:paddingBottom="8dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
