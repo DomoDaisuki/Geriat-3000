@@ -1,19 +1,25 @@
 package com.example.administrateur.geriat3000;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -25,6 +31,7 @@ public class Message extends AppCompatActivity {
     private TextView        mStatusAllView;
 
     private MessagesDataSource dataSource;
+    private PreferesDataSource dataSourcePreference;
 
 
     private static final String TAG = "ChatActivity";
@@ -32,8 +39,10 @@ public class Message extends AppCompatActivity {
     private ListView listViewMessage;
     private EditText chatText;
     private ImageButton buttonSend;
+    private FloatingActionButton button;
     private int side = 1;
     private long contactId;
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,30 +56,29 @@ public class Message extends AppCompatActivity {
         dataSource.open();
 
         listViewMessage = (ListView) findViewById(R.id.listMessage);
+        button = (FloatingActionButton) findViewById(R.id.preferenceButton);
 
         Intent intent = getIntent();
         contactId = Long.parseLong(intent.getStringExtra("contactId"));
 
-        List<MessageDb> values = dataSource.getAllMessagesWithContactId(contactId);
+        final List<MessageDb> values = dataSource.getAllMessagesWithContactId(contactId);
 
-        final ArrayAdapter<MessageDb> adapter = new ArrayAdapter<MessageDb>(this, android.R.layout.simple_list_item_1, values);
+        final ArrayAdapter<MessageDb> adapterMessage = new ArrayAdapter<MessageDb>(this, android.R.layout.simple_list_item_1, values);
 
         System.out.println("kirikou: " + contactId);
 
 
-        listViewMessage.setAdapter(new ChatArrayAdapter(this, adapter, contactId));
+        listViewMessage.setAdapter(new ChatArrayAdapter(this, adapterMessage, contactId));
 
 
         buttonSend = (ImageButton) findViewById(R.id.sendButton);
-
-
 
 
         chatText = (EditText) findViewById(R.id.myMessage);
         chatText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    return sendChatMessage(adapter);
+                    return sendChatMessage(adapterMessage);
                 }
                 return false;
             }
@@ -78,23 +86,95 @@ public class Message extends AppCompatActivity {
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                sendChatMessage(adapter);
+                sendChatMessage(adapterMessage);
             }
         });
 
         listViewMessage.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-       // listViewMessage.setAdapter(adapter);
+        // listViewMessage.setAdapter(adapter);
 
         //to scroll the list view to bottom on data change
-        adapter.registerDataSetObserver(new DataSetObserver() {
+        adapterMessage.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
-                listViewMessage.setSelection(adapter.getCount() - 1);
+                listViewMessage.setSelection(adapterMessage.getCount() - 1);
             }
         });
 
+        button.setOnClickListener(new View.OnClickListener() {
 
+            ListView listViewPreference;
+
+            @Override
+            public void onClick(View arg0) {
+
+                dataSourcePreference = new PreferesDataSource(context);
+                dataSourcePreference.open();
+
+                final Dialog dialog = new Dialog(context);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.custom_layout_preference);
+
+                listViewPreference = (ListView) dialog.findViewById(R.id.list_view_preference);
+                Button dialogButtonAdd = (Button) dialog.findViewById(R.id.buttonAddPreference);
+
+                List<Prefere> preValues = dataSourcePreference.getAllPreferes();
+
+                final ArrayAdapter<Prefere> adapterPreference = new ArrayAdapter<Prefere>(context, android.R.layout.simple_list_item_1, preValues);
+
+                System.out.println("coucou: " + adapterPreference.getItem(0).getMessage());
+
+
+
+                listViewPreference.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+
+                listViewPreference.setAdapter(new CustomAdapterPreference(Message.this, adapterPreference));
+
+
+
+                listViewPreference.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+
+                        Object o = listViewPreference.getItemAtPosition(position);
+                        Prefere prefere = (Prefere)o;
+                        System.out.println("a que coucou: " + prefere.getMessage());
+
+                        dialog.dismiss();
+                        chatText.setText(prefere.getMessage());
+                    }
+                });
+
+
+
+                adapterPreference.registerDataSetObserver(new DataSetObserver() {
+                    @Override
+                    public void onChanged() {
+                        super.onChanged();
+                        listViewMessage.setSelection(adapterPreference.getCount() - 1);
+                    }
+                });
+
+                dialogButtonAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditText prefMessage = (EditText) dialog.findViewById(R.id.editTextPreference);
+                        dataSourcePreference.createPrefere(prefMessage.getText().toString());
+
+                        Prefere prefere = new Prefere();
+                        prefere.setMessage(prefMessage.getText().toString());
+                        adapterPreference.add(prefere);
+                        adapterPreference.notifyDataSetChanged();
+
+                        prefMessage.setText("");
+                    }
+                });
+
+                dialog.show();
+            }
+
+        });
     }
 
     private boolean sendChatMessage(final ArrayAdapter<MessageDb> adapter) {

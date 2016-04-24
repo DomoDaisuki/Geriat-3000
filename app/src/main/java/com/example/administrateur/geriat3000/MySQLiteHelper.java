@@ -23,8 +23,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_MESSAGE = "message";
     public static final String COLUMN_LEFT = "left";
 
+    public static final String TABLE_PREFERE = "preferes";
+    public static final String COLUMN_PRE_ID = "_id";
+    public static final String COLUMN_PRE_MESSAGE = "message";
+
     public static final String DATABASE_NAME = "geriat.db";
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_CREATE_CONTACT = "create table " + TABLE_CONTACT + "("
             + COLUMN_ID + " integer primary key autoincrement, "
@@ -36,6 +40,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + COLUMN_LEFT + " int not null, "
             + COLUMN_MESSAGE + " text not null);";
 
+    private static final String DATABASE_CREATE_PREFERE = "create table " + TABLE_PREFERE + "("
+            + COLUMN_PRE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_PRE_MESSAGE + " text not null);";
+
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -44,6 +52,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(DATABASE_CREATE_CONTACT);
         database.execSQL(DATABASE_CREATE_MESSAGE);
+        database.execSQL(DATABASE_CREATE_PREFERE);
     }
 
     @Override
@@ -52,6 +61,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 + " to " + newVersion + " which destroy all old data.");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PREFERE);
         onCreate(db);
     }
 }
